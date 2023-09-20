@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'Middleearth';
+    src: url(assets/fonts/middleearth-font/Middleearth-ao6m.ttf) format("opentype");
+}
+
+body {
+    background-color: #849784;
+    margin: 0;
+}
