@@ -7,7 +7,7 @@ import { DataServiceService } from '../data-service.service';
   styleUrls: ['./quote-box.component.css']
 })
 export class QuoteBoxComponent implements OnInit {
-  quote: any; // Hier werden die API-Daten gespeichert
+  quote: any;
   console = console
 
   constructor(private dataService: DataServiceService) {}
@@ -15,7 +15,9 @@ export class QuoteBoxComponent implements OnInit {
   ngOnInit() {
     this.dataService.getData().subscribe((response) => {
       const jsonString = JSON.parse(JSON.stringify(response));
-      this.quote = this.parseQuote(jsonString)
+      const dialog = this.parseQuote(jsonString);
+      const chosenWord = this.pickRandomWord(dialog);
+      this.quote = this.createBlank(chosenWord, dialog);
     });
   }
 
@@ -23,7 +25,25 @@ export class QuoteBoxComponent implements OnInit {
     const quotes = json.docs
     const randomIndex = Math.floor(Math.random() * quotes.length);
     const quoteObject = quotes[randomIndex];
-    return quoteObject.dialog;
+    const dialog = quoteObject.dialog;
+    const numberOfWords = dialog.split(' ').length;
+    if (numberOfWords >= 3) {
+      return dialog;
+    } else {
+      return this.parseQuote(json);
+    }  
   }
-  
+
+  pickRandomWord(inputString: string): string {
+    const words = inputString.split(" ");
+    const filteredWords = words.filter((word) => word.length >= 5)
+    const randomIndex = Math.floor(Math.random() * filteredWords.length);
+    return filteredWords[randomIndex];
+  }
+
+  createBlank(inputWord: string, dialog: string): string {
+    const removedWordLength = inputWord.length;
+    const underscores = "_".repeat(removedWordLength);
+    return dialog.replace(inputWord, underscores);
+  }
 }
