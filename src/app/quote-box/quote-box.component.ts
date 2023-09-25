@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DataServiceService } from '../data-service.service';
-import {Subject} from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-quote-box',
@@ -9,8 +9,11 @@ import {Subject} from 'rxjs';
 })
 export class QuoteBoxComponent implements OnInit {
   @Input() newQuote: Subject<void>|undefined;
+  @Input() submittedAnswer: Subject<string>|undefined;
+  @Output('onChosenWord') passToParent: EventEmitter<String> = new EventEmitter<String>();
 
   quote: any;
+  chosenWord: string = "";
   console = console;
 
   constructor(private dataService: DataServiceService) {}
@@ -20,14 +23,17 @@ export class QuoteBoxComponent implements OnInit {
     if(this.newQuote) {
       this.newQuote.subscribe(() => this.getQuote());
     }
+    if(this.submittedAnswer) {
+      this.submittedAnswer.subscribe((answer) => this.checkAnswer(answer));
+    }
   }
 
   getQuote() {
     this.dataService.getData().subscribe((response) => {
       const jsonString = JSON.parse(JSON.stringify(response));
       const dialog = this.parseQuote(jsonString);
-      const chosenWord = this.pickRandomWord(dialog);
-      this.quote = this.createBlank(chosenWord, dialog);
+      this.chosenWord = this.pickRandomWord(dialog);
+      this.quote = this.createBlank(this.chosenWord, dialog);
     });
   }
 
@@ -55,5 +61,13 @@ export class QuoteBoxComponent implements OnInit {
     const removedWordLength = inputWord.length;
     const underscores = "_".repeat(removedWordLength);
     return dialog.replace(inputWord, underscores);
+  }
+
+  checkAnswer(submittedAnswer: string) {
+    if(this.chosenWord === submittedAnswer) {
+      this.console.log("correct")
+    } else {
+      this.console.log("wrong")
+    }
   }
 }

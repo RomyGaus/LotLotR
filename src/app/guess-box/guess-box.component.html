@@ -1,6 +1,6 @@
 <div class="guess">
-    <input placeholder="Your Guess">
+    <input [(ngModel)]="guessTextBoxValue" placeholder="Your Guess" type="text" >
 
-    <button class="btn-guess">Submit</button>
+    <button (click)="submitAnswer()" class="btn-guess">Submit</button>
 </div>
 
