@@ -10,3 +10,11 @@ p {
     margin-bottom: 100px;
     border-radius: 4px;
 }
+
+.correct {
+    color: green;
+}
+
+.incorrect {
+    color: red;
+}

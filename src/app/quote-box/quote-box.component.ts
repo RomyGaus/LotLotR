@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { DataServiceService } from '../data-service.service';
 import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-quote-box',
   templateUrl: './quote-box.component.html',
-  styleUrls: ['./quote-box.component.css']
+  styleUrls: ['./quote-box.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class QuoteBoxComponent implements OnInit {
   @Input() newQuote: Subject<void>|undefined;
@@ -13,6 +14,7 @@ export class QuoteBoxComponent implements OnInit {
   @Output('onChosenWord') passToParent: EventEmitter<String> = new EventEmitter<String>();
 
   quote: any;
+  words: Array<string> = [];
   chosenWord: string = "";
   console = console;
 
@@ -51,8 +53,8 @@ export class QuoteBoxComponent implements OnInit {
   }
 
   pickRandomWord(inputString: string): string {
-    const words = inputString.split(" ");
-    const filteredWords = words.filter((word) => word.length >= 5)
+    this.words = inputString.split(" ");
+    const filteredWords = this.words.filter((word) => word.length >= 5)
     const randomIndex = Math.floor(Math.random() * filteredWords.length);
     return filteredWords[randomIndex];
   }
@@ -64,10 +66,15 @@ export class QuoteBoxComponent implements OnInit {
   }
 
   checkAnswer(submittedAnswer: string) {
-    if(this.chosenWord === submittedAnswer) {
-      this.console.log("correct")
-    } else {
-      this.console.log("wrong")
-    }
+    const spanClass: string = this.chosenWord === submittedAnswer ? "correct" : "incorrect";
+    const updatedQuote = this.words.map((word) => {
+      if(word === this.chosenWord) {
+        return `<span class='${spanClass}'>${word}</span>`
+      } else {
+        return word
+      }
+    })
+    .join(" ");
+    this.quote = updatedQuote;
   }
 }
