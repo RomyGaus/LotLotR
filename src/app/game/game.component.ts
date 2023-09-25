@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-game',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent {
+
+  newQuote: Subject<void> = new Subject<void>();
+
+  onNewQuoteClick() {
+    this.newQuote.next();
+  }
 
 }

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { DataServiceService } from '../data-service.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-quote-box',
@@ -7,12 +8,21 @@ import { DataServiceService } from '../data-service.service';
   styleUrls: ['./quote-box.component.css']
 })
 export class QuoteBoxComponent implements OnInit {
+  @Input() newQuote: Subject<void>|undefined;
+
   quote: any;
-  console = console
+  console = console;
 
   constructor(private dataService: DataServiceService) {}
 
   ngOnInit() {
+    this.getQuote();
+    if(this.newQuote) {
+      this.newQuote.subscribe(() => this.getQuote());
+    }
+  }
+
+  getQuote() {
     this.dataService.getData().subscribe((response) => {
       const jsonString = JSON.parse(JSON.stringify(response));
       const dialog = this.parseQuote(jsonString);
