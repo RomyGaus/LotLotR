@@ -1,7 +1,7 @@
 <div class="flexrow">
     <div class="container">
       <app-quote-box (onChosenWord)="onChosenWord($event)" [newQuote]="newQuote" [submittedAnswer]="submittedAnswer" ></app-quote-box>
-      <app-guess-box (onSubmittedAnswer)="updateSubmittedAnswer($event)" ></app-guess-box>
+      <app-guess-box (onSubmittedAnswer)="updateSubmittedAnswer($event)" [clear]="newQuote" ></app-guess-box>
       <button class="btn-new" (click)="onNewQuoteClick()">New</button>
     </div>
     <!-- <app-answer-box></app-answer-box> -->
