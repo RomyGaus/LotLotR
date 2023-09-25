@@ -8,6 +8,7 @@ import { QuoteBoxComponent } from './quote-box/quote-box.component';
 import { GuessBoxComponent } from './guess-box/guess-box.component';
 import { AnswerBoxComponent } from './answer-box/answer-box.component';
 import { AuthInterceptor } from './auth-interceptor.interceptor';
+import { GameComponent } from './game/game.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { AuthInterceptor } from './auth-interceptor.interceptor';
     HeaderComponent,
     QuoteBoxComponent,
     GuessBoxComponent,
-    AnswerBoxComponent
+    AnswerBoxComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,
